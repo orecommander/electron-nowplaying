@@ -1,0 +1,96 @@
+<html>
+  <head>
+    <style>
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+        margin: 0;
+      }
+      #header {
+        margin: 0.5em;
+      }
+      #wrapper {
+        display: flex;
+        --height: calc(100vh - var(--header-height));
+        height: var(--height);
+        align-items: center;
+      }
+      #image {
+        height: var(--height);
+        margin-right: 1em;
+      }
+      #info-wrapper {
+        flex: 1;
+      }
+      #info-wrapper > *:first-child {
+        margin-block-start: 0;
+      }
+      #info-wrapper > *:last-child {
+        margin-block-end: 0;
+      }
+      .tweet button {
+        background-color: #1b95e0;
+        border: none;
+        border-radius: 4px;
+        height: 28px;
+        padding: 1px 10px 1px 9px;
+        color: white;
+        font-weight: 500;
+        font-family: "Helvetica Neue", Arial, sans-serif;
+      }
+      .tweet button:hover {
+        background-color: #0c7abf;
+      }
+      #loading {
+        display: none;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        margin-top: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="wrapper">
+      <img id="image" src="http://placehold.jp/500x500.png" alt="" />
+      <div id="info-wrapper">
+        <h2><span id="title"></span><button onclick="reload()">Reload</button></h2>
+        <p>by <span id="artist"></span></p>
+        <p><small> (<span id="album"></span>)</small></p>
+        <div class="tweet">
+          <button onclick="tweet()">Tweet</button>
+          <input type="radio" name="auto" value="on" id="auto-on" /><label for="auto-on">on</label>
+          /
+          <input type="radio" name="auto" value="off" checked id="auto-off" /><label for="auto-off">off</label>
+        </div>
+        <div id="loading">
+          <img src="./assets/images/loading.gif" alt="loading" />
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const nowplayingTweet = window.nowplayingTweet
+      const tweet = () => {
+        nowplayingTweet.post()
+      }
+
+      const nowplayingRenderer = window.nowplayingRenderer
+      nowplayingRenderer.render()
+
+      const reload = () => {
+        nowplayingRenderer.render()
+      }
+
+      addEventListener('resize', () => {
+        nowplayingRenderer.updateHeaderHeight()
+      })
+
+      setInterval(nowplayingRenderer.render, 10000)
+      setInterval(() => {
+        const autoOff = document.getElementById('auto-off')
+        if (autoOff.checked) return
+        nowplayingTweet.post()
+      }, 10000)
+    </script>
+  </body>
+</html>
