@@ -47,6 +47,21 @@
         width: 100%;
         margin-top: 10px;
       }
+      .auto-radio-area {
+        margin-top: 10px;
+      }
+      .auto-radio-area h5 {
+        margin: 0;
+      }
+      .auto-radio-area input {
+        margin: 0;
+      }
+      .textarea {
+        margin: 10px 10px 10px 0;
+      }
+      .textarea textarea {
+        width: 100%;
+      }
     </style>
   </head>
   <body>
@@ -56,11 +71,19 @@
         <h2><span id="title"></span><button onclick="reload()">Reload</button></h2>
         <p>by <span id="artist"></span></p>
         <p><small> (<span id="album"></span>)</small></p>
+        <div class="textarea">
+          <textarea id="comment"></textarea>
+        </div>
         <div class="tweet">
           <button onclick="tweet()">Tweet</button>
+        </div>
+        <div class="auto-radio-area">
+          <h5>自動tweet</h5>
           <input type="radio" name="auto" value="on" id="auto-on" /><label for="auto-on">on</label>
           /
           <input type="radio" name="auto" value="off" checked id="auto-off" /><label for="auto-off">off</label>
+          /
+          <input type="radio" name="auto" value="random" id="auto-random" /><label for="auto-random">random</label>
         </div>
         <div id="loading">
           <img src="./assets/images/loading.gif" alt="loading" />
@@ -89,7 +112,8 @@
       setInterval(() => {
         const autoOff = document.getElementById('auto-off')
         if (autoOff.checked) return
-        nowplayingTweet.post()
+        const autoRandom = document.getElementById('auto-random')
+        nowplayingTweet.post(autoRandom.checked)
       }, 10000)
     </script>
   </body>

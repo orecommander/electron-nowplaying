@@ -20,11 +20,14 @@ const nowplayingTweet = {
     loading.style.display = 'none'
   },
 
-  post: async () => {
+  post: async (rand = false) => {
     const resouce = await nowplaying()
     if (!resouce) return
 
     if (nowplayingTweet.beforePostTitle == resouce.name) return
+
+    nowplayingTweet.beforePostTitle = resouce.name
+    if (rand && Math.floor(Math.random() * 5) != 1) return
 
     nowplayingTweet.showLoading();
     const artWork = await nowplaying.getThumbnailBuffer(resouce.databaseID)
@@ -35,8 +38,8 @@ const nowplayingTweet = {
         nowplayingTweet.hideLoading()
         return
       }
-
-      const message = `#Nowplaying ${resouce.name} - ${resouce.artist} (${resouce.album.name})`
+      const comment = document.getElementById('comment').value
+      const message = `${comment}\n#Nowplaying ${resouce.name} - ${resouce.artist} (${resouce.album.name})`
       const status = {
         status: message,
         media_ids: media.media_id_string
@@ -52,7 +55,6 @@ const nowplayingTweet = {
       });
     })
 
-    nowplayingTweet.beforePostTitle = resouce.name
     nowplayingTweet.hideLoading()
   }
 }
